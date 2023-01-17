@@ -33,6 +33,7 @@ public class LinkedList<T> implements List<T> {
 	@Override
 	public boolean last() {
 		// TODO Auto-generated method stub
+		
 		return current.next == null;
 	}
 
@@ -51,6 +52,9 @@ public class LinkedList<T> implements List<T> {
 	@Override
 	public void insert(T e) {
 		// TODO Auto-generated method stub
+		if(e == null) {
+			return;
+		}
 		Node<T> tmp;
 		if(empty())
 			head = current = new Node<T>(e);
@@ -66,6 +70,9 @@ public class LinkedList<T> implements List<T> {
 	@Override
 	public void remove() {
 		// TODO Auto-generated method stub
+		if(head == null) {
+			return;
+		}
 		if(current == head)
 			head = head.next ;
 		else {

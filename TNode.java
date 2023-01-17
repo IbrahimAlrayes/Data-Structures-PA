@@ -7,7 +7,10 @@ public class TNode<T> {
 	public TNode(Location loc) {
 		data = new LinkedList<T>(); //// should we Initialize?
 		this.loc = loc;
-		c1=c2=c3=c4=null;
+		c1=null;
+		c2=null;
+		c3=null;
+		c4=null;
 	}
 
 	public TNode(List<T> data, Location loc, TNode<T> c1, TNode<T> c2, TNode<T> c3, TNode<T> c4) {
@@ -18,5 +21,4 @@ public class TNode<T> {
 		this.c3 = c3;
 		this.c4 = c4;
 	}
-	
 }

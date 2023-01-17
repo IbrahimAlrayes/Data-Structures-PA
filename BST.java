@@ -33,64 +33,92 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
 	@Override
 	public Pair<Boolean, Integer> find(K key) {
 		// TODO Auto-generated method stub
+		Pair<Boolean , Integer> pair = new Pair<Boolean, Integer>(false,0);
+		if(root == null || key ==null) {
+			return pair;
+		}
 		BSTNode<K,T> p = root;
-		Integer count = 0; 
-		Boolean result = false;
 		
-		if(empty())
-			result = false;
+		
 		
 		while(p != null) {
-			if(key.compareTo(p.key) == 0) {
-				current = p;
-				count++;
-				result = true;
-				break;
+			if(key.compareTo(p.key) > 0) {
+				p = p.right;
+				pair.second++;
 			}
 			else if(key.compareTo(p.key) < 0) {
 				p = p.left;
-				count++;
+				pair.second++;
 			}	
 			else {
-				p = p.right;
-				count++;
+				current = p;
+				pair.second++;
+				pair.first = true;
+				return pair;
 			}
 		}
 		//current = q; current is unchanged
 		
-		Pair<Boolean , Integer> pair = new Pair<Boolean, Integer>(result,count);
+		
 		return pair;
 	
 	}
 
 	@Override
 	public Pair<Boolean, Integer> insert(K key, T data) {//needs to be completed.........
-		BSTNode<K,T> p = current;
-		Boolean result = true;
-		Integer count = 0; // does count = find(key).second ;?????
 		
-		Pair<Boolean , Integer> pair = new Pair<Boolean, Integer>(result,count);
-		if(find(key).first) {
+		Pair<Boolean , Integer> find = find(key);
+		if(key ==null) {
+			Pair<Boolean , Integer> pair1 = new Pair<Boolean, Integer>(find.first,find.second);
+			return pair1 ;
+		}
+		BSTNode<K,T> oldcurr = current;
+		Pair<Boolean , Integer> pair = new Pair<Boolean, Integer>(true,0);
+		
+		if(find.first) {
+			current = oldcurr;
 			pair.first = false;
-			pair.second = find(key).second;
+			pair.second = find.second;  //// better make attention to this
 			return pair;
 		}
 		BSTNode<K,T> newNode = new BSTNode<K,T>(key,data);
-		if(empty())
+		BSTNode<K,T> p = root;
+		BSTNode<K,T> q = null;
+		while(p != null) {
+			q = p;
+			if(key.compareTo(p.key) > 0) {
+				p = p.right;
+				pair.second++;
+				}
+			
+			else {
+				p = p.left;
+				pair.second++;
+				}
+			}
+		if(q == null) {
 			root = current = newNode;
-		
-		
-		if(key.compareTo(p.key) > 0) {
-			p.right = newNode;
-			pair.second++;
-			current = newNode ;
+			pair.first = true;
+			return pair;
 		}
-		else {
-			p.left = newNode;
-			pair.second++;
-			current = newNode ;
-		}
+			
 		
+		if(p == null) {
+			if(key.compareTo(q.key) > 0) {
+				q.right = newNode;
+				current = newNode;
+				pair.first = true;
+				pair.second++;
+				return pair;
+			}
+			else {
+				q.left = newNode;
+				current = newNode;
+				pair.first = true;
+				pair.second++;
+				return pair;
+			}
+		}
 		return pair;
 		}
 			
@@ -102,9 +130,12 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
 		Boolean removed = false;
 		Integer count = 0;
 		Pair<Boolean, Integer> pair = new Pair<Boolean, Integer>(removed,count);
+		if(key == null) {
+			return pair;
+		}
 		BSTNode<K,T> p;
 		p = remove_aux(key, root, pair);
-		//current = root = p;
+		current = root = p;
 		return pair;
 	}
 	// Helper method for removing
@@ -122,6 +153,7 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
 		}
 		else {
 			pair.first = true;
+			pair.second ++;
 			if (p.left != null && p.right != null){ //two children
 				q = find_min(p.right);
 				p.key = q.key;
@@ -168,5 +200,5 @@ public class BST<K extends Comparable<K>, T> implements Map<K, T> {
 		getAllrec(Node.right, l);
 		return l;
 	}
-
+	
 }
